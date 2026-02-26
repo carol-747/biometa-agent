@@ -1,0 +1,21 @@
+[
+  "Candida albicans", "Candida glabrata", "Candida tropicalis", "Candida parapsilosis",
+  "Saccharomyces cerevisiae", "Saccharomyces boulardii",
+  "Aspergillus fumigatus", "Aspergillus niger", "Aspergillus flavus",
+  "Cryptococcus neoformans", "Cryptococcus gattii",
+  "Penicillium chrysogenum", "Penicillium roqueforti",
+  "Fusarium oxysporum", "Fusarium graminearum", "Fusarium solani",
+  "Trichophyton rubrum", "Trichophyton tonsurans",
+  "Rhizopus oryzae", "Rhizopus microsporus",
+  "Mucor racemosus", "Mucor circinelloides",
+  "Trichoderma reesei", "Trichoderma viride",
+  "Neurospora crassa",
+  "Coccidioides immitis", "Coccidioides posadasii",
+  "Histoplasma capsulatum",
+  "Blastomyces dermatitidis",
+  "Pneumocystis jirovecii",
+  "Malassezia furfur", "Malassezia globosa",
+  "Pichia pastoris", "Pichia kudriavzevii",
+  "Yarrowia lipolytica",
+  "Mortierella alpina"
+]
