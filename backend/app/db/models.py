@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Optional, List
 from sqlalchemy import (
     Column, String, Text, Integer, Float, Boolean,
-    DateTime, ForeignKey, ARRAY, JSON, UniqueConstraint, Index
+    DateTime, ForeignKey, JSON, UniqueConstraint, Index
 )
 from sqlalchemy.orm import DeclarativeBase, relationship
 
@@ -24,7 +24,7 @@ class Article(Base):
     pub_date = Column(String(50), nullable=True)
     doi = Column(String(256), nullable=True)
     language = Column(String(10), nullable=True)
-    publication_type = Column(ARRAY(String), nullable=True)
+    publication_type = Column(JSON, nullable=True)    # list of strings, stored as JSON
     country = Column(String(100), nullable=True)
     full_text_link = Column(Text, nullable=True)
 

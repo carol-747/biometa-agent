@@ -1,5 +1,5 @@
 """Application configuration via environment variables."""
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from functools import lru_cache
 
 
@@ -26,9 +26,10 @@ class Settings(BaseSettings):
     ]
     semantic_search_top_k: int = 20
 
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+    )
 
 
 @lru_cache()

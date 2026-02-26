@@ -1,39 +1,11 @@
-"""Integration tests for FastAPI endpoints."""
-import pytest
-from fastapi.testclient import TestClient
-from unittest.mock import patch, MagicMock
-import sys
-import os
-
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-
-
-@pytest.fixture
-def client():
-    """Create a test client with a mocked database."""
-    from app.main import app
-    from app.db.database import get_db
-
-    def override_db():
-        db = MagicMock()
-        db.query.return_value.count.return_value = 0
-        db.query.return_value.filter.return_value.first.return_value = None
-        db.query.return_value.offset.return_value.limit.return_value.all.return_value = []
-        db.query.return_value.filter_by.return_value.first.return_value = None
-        db.query.return_value.all.return_value = []
-        yield db
-
-    app.dependency_overrides[get_db] = override_db
-    with TestClient(app) as c:
-        yield c
-    app.dependency_overrides.clear()
+"""Integration tests for FastAPI endpoints using an in-memory SQLite DB."""
+# Fixtures (client, sqlite_engine, db_session) are provided by conftest.py
 
 
 def test_root(client):
     res = client.get("/")
     assert res.status_code == 200
-    data = res.json()
-    assert data["name"] == "BiometaAgent"
+    assert res.json()["name"] == "BiometaAgent"
 
 
 def test_health(client):
@@ -81,6 +53,12 @@ def test_search_network(client):
 def test_ingest_stats(client):
     res = client.get("/api/v1/ingest/stats")
     assert res.status_code == 200
+    data = res.json()
+    assert "articles" in data
+    assert "microbes" in data
+    assert "metabolites" in data
+    assert "relationships" in data
+    assert "relationship_types" in data
 
 
 def test_article_not_found(client):
