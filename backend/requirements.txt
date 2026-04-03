@@ -8,6 +8,7 @@ sqlalchemy==2.0.30
 alembic==1.13.1
 psycopg2-binary==2.9.9
 asyncpg==0.29.0
+pgvector==0.3.2          # native PostgreSQL vector similarity search (optional)
 
 # PubMed / Bioinformatics
 biopython==1.83

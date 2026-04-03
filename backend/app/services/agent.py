@@ -164,6 +164,18 @@ class ConversationalAgent:
             }
         )
 
+        # If no API key configured, skip Claude and format results directly
+        if not self.client.api_key:
+            reply = self._format_direct_reply(user_message, db_context)
+            updated_history = list(conversation_history)
+            updated_history.append({"role": "user", "content": user_message})
+            updated_history.append({"role": "assistant", "content": reply})
+            return reply, updated_history, {
+                "analysis": analysis,
+                "articles": db_context["articles"],
+                "relationships": db_context["relationships"],
+            }
+
         try:
             response = self.client.messages.create(
                 model=self.model,
@@ -184,10 +196,18 @@ class ConversationalAgent:
                 "relationships": db_context["relationships"],
             }
 
-        except anthropic.AuthenticationError:
+        except (anthropic.AuthenticationError, anthropic.PermissionDeniedError):
+            logger.warning("Claude API key invalid or missing — using direct DB fallback")
+            reply = self._format_direct_reply(user_message, db_context)
+            updated_history = list(conversation_history)
+            updated_history.append({"role": "user", "content": user_message})
+            updated_history.append({"role": "assistant", "content": reply})
+            return reply, updated_history, db_context
+
+        except anthropic.RateLimitError:
             reply = (
-                "Authentication error: Please set a valid ANTHROPIC_API_KEY. "
-                "I can still search the database — just ask!"
+                "Claude API rate limit reached. Here are the raw database results:\n\n"
+                + self._format_context(db_context)
             )
             updated_history = list(conversation_history)
             updated_history.append({"role": "user", "content": user_message})
@@ -196,11 +216,57 @@ class ConversationalAgent:
 
         except Exception as e:
             logger.error(f"Agent error: {e}")
-            reply = f"I encountered an error processing your query: {str(e)}"
+            reply = self._format_direct_reply(user_message, db_context)
             updated_history = list(conversation_history)
             updated_history.append({"role": "user", "content": user_message})
             updated_history.append({"role": "assistant", "content": reply})
             return reply, updated_history, db_context
+
+    def _format_direct_reply(self, query: str, ctx: dict[str, Any]) -> str:
+        """
+        Produce a structured plain-text reply from database results alone,
+        used when the Claude API is unavailable.
+        """
+        lines = [f"**Database results for:** _{query}_\n"]
+
+        rels = ctx.get("relationships", [])
+        arts = ctx.get("articles", [])
+
+        if rels:
+            lines.append(f"**Relationships found ({len(rels)}):**\n")
+            for r in rels[:15]:
+                conf_pct = int((r.get("confidence") or 0) * 100)
+                lines.append(
+                    f"- **{r['microbe']}** → `{r['relationship_type']}` → **{r['metabolite']}**  "
+                    f"(Confidence: {conf_pct}%, PMID: [{r['pmid']}]"
+                    f"(https://pubmed.ncbi.nlm.nih.gov/{r['pmid']}/))"
+                )
+                if r.get("evidence"):
+                    lines.append(f"  > _{r['evidence'][:200]}_")
+        else:
+            lines.append("No relationships found in the database for this query.")
+
+        if arts:
+            lines.append(f"\n**Relevant articles ({len(arts)}):**\n")
+            for a in arts[:5]:
+                link = a.get("full_text_link") or f"https://pubmed.ncbi.nlm.nih.gov/{a['pmid']}/"
+                lines.append(
+                    f"- [{a['title'][:100]}]({link})  "
+                    f"_{a.get('journal', '')}_, {a.get('pub_date', '')} — "
+                    f"score: {a.get('score', 0):.2f}"
+                )
+
+        if not rels and not arts:
+            lines.append(
+                "\nTip: Use the **Ingest** tab to fetch PubMed articles first, "
+                "then ask your question again."
+            )
+
+        lines.append(
+            "\n_Note: Claude API is not configured. "
+            "Set ANTHROPIC_API_KEY in your .env for conversational responses._"
+        )
+        return "\n".join(lines)
 
     def _format_context(self, ctx: dict[str, Any]) -> str:
         """Format database context for injection into Claude prompt."""

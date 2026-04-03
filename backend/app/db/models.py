@@ -7,6 +7,13 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import DeclarativeBase, relationship
 
+# pgvector is optional; fall back gracefully if not installed or not on PostgreSQL
+try:
+    from pgvector.sqlalchemy import Vector as PgVector
+    _PGVECTOR_AVAILABLE = True
+except ImportError:
+    _PGVECTOR_AVAILABLE = False
+
 
 class Base(DeclarativeBase):
     pass
@@ -40,7 +47,11 @@ class Article(Base):
     citations_count = Column(Integer, nullable=True)
 
     # Processing metadata
-    embedding = Column(JSON, nullable=True)        # stored as list
+    embedding = Column(JSON, nullable=True)        # JSON fallback (all backends)
+    # pgvector column — only added when the extension is available
+    embedding_vector = Column(
+        PgVector(384), nullable=True
+    ) if _PGVECTOR_AVAILABLE else None
     processed = Column(Boolean, default=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

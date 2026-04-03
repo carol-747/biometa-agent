@@ -19,12 +19,47 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
+def _check_ner_backend() -> str:
+    """Return which NER model is active and log a clear status line."""
+    try:
+        import spacy
+        for model_name in ("en_core_sci_sm", "en_core_web_sm"):
+            try:
+                spacy.load(model_name)
+                return model_name
+            except OSError:
+                continue
+    except ImportError:
+        pass
+    return "none (dictionary + regex only)"
+
+
+def _check_claude_api() -> bool:
+    """Return True if an API key is configured."""
+    from app.core.config import get_settings
+    key = get_settings().anthropic_api_key
+    return bool(key and key != "your_anthropic_api_key_here")
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Startup and shutdown events."""
     logger.info("Starting BiometaAgent...")
     init_db()
     logger.info("Database initialized.")
+
+    ner_model = _check_ner_backend()
+    logger.info(f"NER backend : {ner_model}")
+
+    claude_ok = _check_claude_api()
+    if claude_ok:
+        logger.info("Claude API  : configured")
+    else:
+        logger.warning(
+            "Claude API  : NOT configured — set ANTHROPIC_API_KEY in .env. "
+            "The app will run in database-only mode (no conversational AI)."
+        )
+
     yield
     logger.info("Shutting down BiometaAgent.")
 

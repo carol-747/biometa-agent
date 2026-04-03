@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { ingestAPI } from '../utils/api';
 
 export default function IngestPanel({ onStatsUpdate }) {
@@ -10,15 +10,15 @@ export default function IngestPanel({ onStatsUpdate }) {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const loadStats = async () => {
+  const loadStats = useCallback(async () => {
     try {
       const res = await ingestAPI.getStats();
       setStats(res.data);
       if (onStatsUpdate) onStatsUpdate(res.data);
     } catch {}
-  };
+  }, [onStatsUpdate]);
 
-  useEffect(() => { loadStats(); }, []);
+  useEffect(() => { loadStats(); }, [loadStats]);
 
   // Poll job status
   useEffect(() => {
@@ -34,7 +34,7 @@ export default function IngestPanel({ onStatsUpdate }) {
       } catch {}
     }, 2000);
     return () => clearInterval(interval);
-  }, [jobId, jobStatus?.status]);
+  }, [jobId, jobStatus?.status, loadStats]);
 
   const startIngestion = async () => {
     setLoading(true);
