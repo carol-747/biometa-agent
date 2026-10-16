@@ -89,7 +89,7 @@ Claude Desktop config are in the file's docstring and `mcp_server/requirements.t
 ### 1. Clone and configure
 
 ```bash
-git clone <repo>
+git clone https://github.com/carol-747/biometa-agent
 cd biometa-agent
 cp .env.example .env
 # Edit .env with your ANTHROPIC_API_KEY and ENTREZ_EMAIL
@@ -314,28 +314,29 @@ GET /api/v1/articles/{pmid}/relationships - Get relationships for article
 
 ### Entity Extraction (3-tier)
 1. **Dictionary matching**: Fast regex over curated lists of bacteria, fungi, viruses, metabolites
-2. **scispaCy NER**: Biomedical named entity recognition (`en_core_sci_sm` model)
-3. **Pattern matching**: Binomial species name regex for novel entities
+2. **spaCy NER** *(optional)*: biomedical NER via scispaCy's `en_core_sci_sm` when installed, falling back to `en_core_web_sm`; skipped entirely if spaCy is absent (dictionary + regex still run)
+3. **Pattern matching**: genus-aware binomial species regex for entities not in the dictionaries
 
 ### Relationship Extraction
-Pattern-based extraction identifies 8 relationship types from sentences containing both a microbe and metabolite:
+Identifies 8 relationship types (`produces`, `consumes`, `converts`, `inhibits`,
+`activates`, `regulates`, `associates_with`, `interacts`) from sentences
+containing both a microbe and a metabolite. Two rule-based extractors are
+available (selected with `method=`), plus an optional Claude tool-use extractor:
 
-| Type | Example patterns |
-|------|-----------------|
-| produces | produces, secretes, synthesizes, generates |
-| consumes | consumes, metabolizes, degrades, utilizes |
-| regulates | regulates, modulates, controls, affects |
-| inhibits | inhibits, suppresses, blocks, decreases |
-| activates | activates, stimulates, induces, promotes |
-| converts | converts, transforms, catalyzes |
-| associates_with | associates, correlates, linked to |
-| interacts | interacts, binds, reacts |
+- **`rules_v2` (default)** — *pair-scoped*: for each microbe–metabolite pair it
+  reads only the text linking that specific pair. It handles passive voice
+  ("B is produced by X"), substrate vs. product ("produces B from A" → produces
+  B **and** consumes A), nearest-subject assignment in multi-clause sentences,
+  and **scoped negation — a negated pair yields no relationship** (it is not
+  emitted at all).
+- **`rules_v1` (legacy)** — *sentence-scoped*: labels every pair in a sentence
+  with whichever trigger word appears anywhere in it, and only halves the
+  confidence on negation. Kept for the before/after comparison in the evals.
 
-Confidence scoring includes:
-- Pattern match strength (0.65 base)
-- Entity proximity within sentence (+0–15%)
-- Directional order (microbe before metabolite for "produces")
-- Negation detection (50% penalty)
+Confidence scoring (rules) combines a base trigger-match score, entity proximity,
+and directional cues; hedging ("may", "suggest") lowers it. See the measured
+accuracy of each method in [Evaluation results](#evaluation-results) and
+[`evals/`](evals/).
 
 ### Semantic Search
 Uses `all-MiniLM-L6-v2` (384-dim embeddings) with cosine similarity. Falls back to ILIKE keyword search if embeddings unavailable.
@@ -349,7 +350,9 @@ Uses `all-MiniLM-L6-v2` (384-dim embeddings) with cosine similarity. Falls back 
 ```bash
 cd backend
 pip install -r requirements.txt
-python -m spacy download en_core_web_sm
+# Optional biomedical NER (dictionary + regex extraction work without it):
+#   pip install scispacy && pip install <en_core_sci_sm wheel URL from the scispaCy releases>
+# or a lighter fallback:  python -m spacy download en_core_web_sm
 export DATABASE_URL=postgresql://biometa:biometa_secret@localhost:5432/biometa_db
 export ANTHROPIC_API_KEY=your_key
 uvicorn app.main:app --reload
