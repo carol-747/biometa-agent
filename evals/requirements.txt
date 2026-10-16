@@ -1,0 +1,2 @@
+# Evals reuse the backend package (add backend/ to PYTHONPATH). Extra deps:
+anthropic>=0.26,<1   # only for the optional --live agent eval / llm extraction method

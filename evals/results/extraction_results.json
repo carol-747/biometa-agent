@@ -1,0 +1,1195 @@
+{
+  "dev": {
+    "rules_v1": {
+      "method": "rules_v1",
+      "n_sentences": 70,
+      "microbes": {
+        "precision": 0.798,
+        "recall": 1.0,
+        "f1": 0.887,
+        "tp": 71,
+        "fp": 18,
+        "fn": 0
+      },
+      "metabolites": {
+        "precision": 1.0,
+        "recall": 0.98,
+        "f1": 0.99,
+        "tp": 96,
+        "fp": 0,
+        "fn": 2
+      },
+      "pairs": {
+        "precision": 0.685,
+        "recall": 0.927,
+        "f1": 0.788,
+        "tp": 76,
+        "fp": 35,
+        "fn": 6
+      },
+      "triples": {
+        "precision": 0.514,
+        "recall": 0.695,
+        "f1": 0.591,
+        "tp": 57,
+        "fp": 54,
+        "fn": 25
+      },
+      "negation_errors": 12,
+      "negated_total": 13,
+      "calibration": [
+        {
+          "bucket": "0.00-0.50",
+          "n": 18,
+          "precision": 0.167
+        },
+        {
+          "bucket": "0.50-0.70",
+          "n": 20,
+          "precision": 0.7
+        },
+        {
+          "bucket": "0.70-0.85",
+          "n": 70,
+          "precision": 0.829
+        },
+        {
+          "bucket": "0.85-1.00",
+          "n": 3,
+          "precision": 0.333
+        }
+      ],
+      "by_tag": {
+        "association": {
+          "fp": 1,
+          "gold": 6,
+          "hit": 5
+        },
+        "confounder": {
+          "fp": 2
+        },
+        "contrast": {
+          "fp": 1,
+          "gold": 1,
+          "hit": 1
+        },
+        "coordination": {
+          "fp": 5,
+          "gold": 21,
+          "hit": 15
+        },
+        "distractor": {
+          "fp": 1,
+          "gold": 1,
+          "hit": 1
+        },
+        "ellipsis": {
+          "fp": 1,
+          "gold": 1,
+          "hit": 1
+        },
+        "false-entity": {
+          "fp": 7,
+          "gold": 3,
+          "hit": 3
+        },
+        "generic-microbe": {
+          "fp": 2
+        },
+        "hedge": {
+          "fp": 1,
+          "gold": 1,
+          "hit": 1
+        },
+        "metabolite-acts": {
+          "fp": 1,
+          "gold": 5,
+          "hit": 5
+        },
+        "multi-clause": {
+          "fp": 3,
+          "gold": 3,
+          "hit": 2
+        },
+        "negation": {
+          "fp": 15,
+          "gold": 3,
+          "hit": 3
+        },
+        "no-microbe": {
+          "fp": 1
+        },
+        "nominal": {
+          "fp": 0,
+          "gold": 4,
+          "hit": 3
+        },
+        "oov-metabolite": {
+          "fp": 0,
+          "gold": 4,
+          "hit": 2
+        },
+        "oov-microbe": {
+          "fp": 0,
+          "gold": 6,
+          "hit": 5
+        },
+        "passive": {
+          "fp": 4,
+          "gold": 12,
+          "hit": 6
+        },
+        "simple": {
+          "fp": 2,
+          "gold": 11,
+          "hit": 9
+        },
+        "source-of": {
+          "fp": 1,
+          "gold": 1,
+          "hit": 0
+        },
+        "substrate": {
+          "fp": 0,
+          "gold": 26,
+          "hit": 15
+        },
+        "two-verbs": {
+          "fp": 0,
+          "gold": 6,
+          "hit": 3
+        }
+      },
+      "errors": [
+        {
+          "id": "s001",
+          "text": "Faecalibacterium prausnitzii produces butyrate from acetate in the colon.",
+          "predicted": "faecalibacterium prausnitzii -[produces]-> acetate",
+          "expected": "['consumes', 'converts']",
+          "error": "wrong type"
+        },
+        {
+          "id": "s002",
+          "text": "Butyrate is produced by Roseburia intestinalis during fermentation of inulin.",
+          "predicted": "roseburia intestinalis -[consumes]-> butyrate",
+          "expected": "['produces']",
+          "error": "wrong type"
+        },
+        {
+          "id": "s002",
+          "text": "Butyrate is produced by Roseburia intestinalis during fermentation of inulin.",
+          "predicted": "roseburia intestinalis -[produces]-> inulin",
+          "expected": "['consumes']",
+          "error": "wrong type"
+        },
+        {
+          "id": "s003",
+          "text": "Escherichia coli did not produce butyrate under aerobic conditions.",
+          "predicted": "escherichia coli -[produces]-> butyrate",
+          "expected": "-",
+          "error": "negated pair asserted"
+        },
+        {
+          "id": "s004",
+          "text": "Lactobacillus reuteri reduced TMAO levels, whereas Escherichia coli produced acetate.",
+          "predicted": "lactobacillus reuteri -[produces]-> tmao",
+          "expected": "['inhibits']",
+          "error": "wrong type"
+        },
+        {
+          "id": "s004",
+          "text": "Lactobacillus reuteri reduced TMAO levels, whereas Escherichia coli produced acetate.",
+          "predicted": "lactobacillus reuteri -[produces]-> acetate",
+          "expected": "-",
+          "error": "spurious pair"
+        },
+        {
+          "id": "s004",
+          "text": "Lactobacillus reuteri reduced TMAO levels, whereas Escherichia coli produced acetate.",
+          "predicted": "escherichia coli -[produces]-> tmao",
+          "expected": "-",
+          "error": "spurious pair"
+        },
+        {
+          "id": "s005",
+          "text": "Gut bacteria produce propionate.",
+          "predicted": "gut bacteria -[produces]-> propionate",
+          "expected": "-",
+          "error": "spurious pair"
+        },
+        {
+          "id": "s006",
+          "text": "The production of butyrate was increased in mice fed a high-fiber diet.",
+          "predicted": "the production -[produces]-> butyrate",
+          "expected": "-",
+          "error": "spurious pair"
+        },
+        {
+          "id": "s008",
+          "text": "Bacteroides thetaiotaomicron degrades pectin and releases succinate.",
+          "predicted": "bacteroides thetaiotaomicron -[produces]-> pectin",
+          "expected": "['consumes']",
+          "error": "wrong type"
+        },
+        {
+          "id": "s010",
+          "text": "Bifidobacterium longum ferments galactooligosaccharides to lactate and acetate.",
+          "predicted": "bifidobacterium longum -[consumes]-> lactate",
+          "expected": "['produces', 'converts']",
+          "error": "wrong type"
+        },
+        {
+          "id": "s010",
+          "text": "Bifidobacterium longum ferments galactooligosaccharides to lactate and acetate.",
+          "predicted": "bifidobacterium longum -[consumes]-> acetate",
+          "expected": "['produces', 'converts']",
+          "error": "wrong type"
+        },
+        {
+          "id": "s011",
+          "text": "Ruminococcus gnavus was not associated with secondary bile acids in this cohort.",
+          "predicted": "ruminococcus gnavus -[associates_with]-> secondary bile acids",
+          "expected": "-",
+          "error": "negated pair asserted"
+        },
+        {
+          "id": "s013",
+          "text": "Streptococcus mutans metabolizes sucrose to lactic acid, lowering dental plaque pH.",
+          "predicted": "streptococcus mutans -[consumes]-> lactic acid",
+          "expected": "['produces', 'converts']",
+          "error": "wrong type"
+        },
+        {
+          "id": "s016",
+          "text": "Supplementation with Lactobacillus plantarum increased fecal butyrate concentrations.",
+          "predicted": "supplementation with -[activates]-> butyrate",
+          "expected": "-",
+          "error": "spurious pair"
+        },
+        {
+          "id": "s018",
+          "text": "Enterococcus faecalis produces tyramine through tyrosine decarboxylation.",
+          "predicted": "enterococcus faecalis -[produces]-> tyrosine",
+          "expected": "['consumes', 'converts']",
+          "error": "wrong type"
+        },
+        {
+          "id": "s020",
+          "text": "Methanobrevibacter smithii consumes hydrogen and generates methane.",
+          "predicted": "methanobrevibacter smithii -[produces]-> hydrogen",
+          "expected": "['consumes']",
+          "error": "wrong type"
+        },
+        {
+          "id": "s021",
+          "text": "These results suggest that Bacteroides fragilis may modulate GABA levels.",
+          "predicted": "these results -[regulates]-> gaba",
+          "expected": "-",
+          "error": "spurious pair"
+        },
+        {
+          "id": "s022",
+          "text": "Saccharomyces boulardii did not alter serum TMAO concentrations.",
+          "predicted": "saccharomyces boulardii -[regulates]-> tmao",
+          "expected": "-",
+          "error": "negated pair asserted"
+        },
+        {
+          "id": "s023",
+          "text": "Escherichia coli and Klebsiella oxytoca both produce trimethylamine from choline.",
+          "predicted": "escherichia coli -[produces]-> choline",
+          "expected": "['consumes', 'converts']",
+          "error": "wrong type"
+        },
+        {
+          "id": "s023",
+          "text": "Escherichia coli and Klebsiella oxytoca both produce trimethylamine from choline.",
+          "predicted": "klebsiella oxytoca -[produces]-> choline",
+          "expected": "['consumes', 'converts']",
+          "error": "wrong type"
+        },
+        {
+          "id": "s024",
+          "text": "Lipopolysaccharide from Escherichia coli activated TLR4 signaling in macrophages.",
+          "predicted": "lipopolysaccharide from -[activates]-> lipopolysaccharide",
+          "expected": "-",
+          "error": "spurious pair"
+        },
+        {
+          "id": "s024",
+          "text": "Lipopolysaccharide from Escherichia coli activated TLR4 signaling in macrophages.",
+          "predicted": "escherichia coli -[activates]-> lipopolysaccharide",
+          "expected": "['produces']",
+          "error": "wrong type"
+        },
+        {
+          "id": "s028",
+          "text": "Unlike Eubacterium rectale, Bacteroides vulgatus does not produce butyrate.",
+          "predicted": "bacteroides vulgatus -[produces]-> butyrate",
+          "expected": "-",
+          "error": "negated pair asserted"
+        },
+        {
+          "id": "s030",
+          "text": "Pseudomonas aeruginosa produced hydrogen sulfide in cysteine-rich media.",
+          "predicted": "pseudomonas aeruginosa -[produces]-> cysteine",
+          "expected": "-",
+          "error": "spurious pair"
+        },
+        {
+          "id": "s031",
+          "text": "Serotonin synthesis in the gut is promoted by spore-forming bacteria.",
+          "predicted": "serotonin synthesis -[produces]-> serotonin",
+          "expected": "-",
+          "error": "spurious pair"
+        },
+        {
+          "id": "s034",
+          "text": "Bilophila wadsworthia generates hydrogen sulfide from taurine.",
+          "predicted": "-",
+          "expected": "bilophila wadsworthia -[consumes/converts]-> taurine",
+          "error": "missed"
+        },
+        {
+          "id": "s036",
+          "text": "In contrast, lithocholic acid was reduced after vancomycin treatment.",
+          "predicted": "in contrast -[inhibits]-> lithocholic acid",
+          "expected": "-",
+          "error": "spurious pair"
+        },
+        {
+          "id": "s037",
+          "text": "Bifidobacterium breve was unable to utilize xylose.",
+          "predicted": "bifidobacterium breve -[consumes]-> xylose",
+          "expected": "-",
+          "error": "negated pair asserted"
+        },
+        {
+          "id": "s040",
+          "text": "Short-chain fatty acids produced by Lachnospiraceae strengthen the gut barrier.",
+          "predicted": "lachnospiraceae strengthen -[produces]-> short-chain fatty acids",
+          "expected": "-",
+          "error": "spurious pair"
+        },
+        {
+          "id": "s041",
+          "text": "Salmonella enterica exploits succinate to promote its expansion in the inflamed gut.",
+          "predicted": "salmonella enterica -[activates]-> succinate",
+          "expected": "['consumes']",
+          "error": "wrong type"
+        },
+        {
+          "id": "s042",
+          "text": "Treatment with metformin increased Akkermansia muciniphila but decreased lactate.",
+          "predicted": "treatment with -[inhibits]-> lactate",
+          "expected": "-",
+          "error": "spurious pair"
+        },
+        {
+          "id": "s042",
+          "text": "Treatment with metformin increased Akkermansia muciniphila but decreased lactate.",
+          "predicted": "akkermansia muciniphila -[inhibits]-> lactate",
+          "expected": "-",
+          "error": "spurious pair"
+        },
+        {
+          "id": "s043",
+          "text": "Escherichia coli Nissle was engineered to degrade phenylalanine.",
+          "predicted": "nissle was -[consumes]-> phenylalanine",
+          "expected": "-",
+          "error": "spurious pair"
+        },
+        {
+          "id": "s045",
+          "text": "Increased Ruminococcus gnavus abundance correlated with lower butyrate and higher succinate.",
+          "predicted": "ruminococcus gnavus -[activates]-> butyrate",
+          "expected": "['associates_with', 'inhibits']",
+          "error": "wrong type"
+        },
+        {
+          "id": "s046",
+          "text": "Bacteroides ovatus did not degrade inulin, but Bacteroides uniformis did.",
+          "predicted": "bacteroides ovatus -[consumes]-> inulin",
+          "expected": "-",
+          "error": "negated pair asserted"
+        },
+        {
+          "id": "s047",
+          "text": "Glucose was rapidly consumed by Saccharomyces cerevisiae, yielding ethanol and carbon dioxide.",
+          "predicted": "glucose was -[consumes]-> glucose",
+          "expected": "-",
+          "error": "spurious pair"
+        },
+        {
+          "id": "s047",
+          "text": "Glucose was rapidly consumed by Saccharomyces cerevisiae, yielding ethanol and carbon dioxide.",
+          "predicted": "glucose was -[consumes]-> ethanol",
+          "expected": "-",
+          "error": "spurious pair"
+        },
+        {
+          "id": "s047",
+          "text": "Glucose was rapidly consumed by Saccharomyces cerevisiae, yielding ethanol and carbon dioxide.",
+          "predicted": "glucose was -[consumes]-> carbon dioxide",
+          "expected": "-",
+          "error": "spurious pair"
+        },
+        {
+          "id": "s047",
+          "text": "Glucose was rapidly consumed by Saccharomyces cerevisiae, yielding ethanol and carbon dioxide.",
+          "predicted": "saccharomyces cerevisiae -[consumes]-> ethanol",
+          "expected": "['produces', 'converts']",
+          "error": "wrong type"
+        },
+        {
+          "id": "s047",
+          "text": "Glucose was rapidly consumed by Saccharomyces cerevisiae, yielding ethanol and carbon dioxide.",
+          "predicted": "saccharomyces cerevisiae -[consumes]-> carbon dioxide",
+          "expected": "['produces', 'converts']",
+          "error": "wrong type"
+        },
+        {
+          "id": "s049",
+          "text": "Penicillium chrysogenum is the industrial source of penicillin.",
+          "predicted": "-",
+          "expected": "penicillium chrysogenum -[produces]-> penicillin",
+          "error": "missed"
+        },
+        {
+          "id": "s052",
+          "text": "Butyrate reduced the expression of virulence genes in Salmonella typhimurium.",
+          "predicted": "butyrate reduced -[inhibits]-> butyrate",
+          "expected": "-",
+          "error": "spurious pair"
+        },
+        {
+          "id": "s055",
+          "text": "Our data show that Blautia producta does not convert choline to TMA.",
+          "predicted": "our data -[produces]-> choline",
+          "expected": "-",
+          "error": "spurious pair"
+        },
+        {
+          "id": "s055",
+          "text": "Our data show that Blautia producta does not convert choline to TMA.",
+          "predicted": "our data -[produces]-> tma",
+          "expected": "-",
+          "error": "spurious pair"
+        },
+        {
+          "id": "s055",
+          "text": "Our data show that Blautia producta does not convert choline to TMA.",
+          "predicted": "blautia producta -[produces]-> choline",
+          "expected": "-",
+          "error": "negated pair asserted"
+        },
+        {
+          "id": "s055",
+          "text": "Our data show that Blautia producta does not convert choline to TMA.",
+          "predicted": "blautia producta -[produces]-> tma",
+          "expected": "-",
+          "error": "negated pair asserted"
+        },
+        {
+          "id": "s056",
+          "text": "Lactobacillus rhamnosus GG supplementation lowered serum TMAO.",
+          "predicted": "-",
+          "expected": "lactobacillus rhamnosus -[inhibits]-> tmao",
+          "error": "missed"
+        },
+        {
+          "id": "s058",
+          "text": "Fecal acetate was positively associated with Bifidobacterium adolescentis.",
+          "predicted": "fecal acetate -[associates_with]-> acetate",
+          "expected": "-",
+          "error": "spurious pair"
+        },
+        {
+          "id": "s060",
+          "text": "Glutamate is decarboxylated to GABA by Lactobacillus brevis.",
+          "predicted": "-",
+          "expected": "lactobacillus brevis -[consumes/converts]-> glutamate",
+          "error": "missed"
+        },
+        {
+          "id": "s060",
+          "text": "Glutamate is decarboxylated to GABA by Lactobacillus brevis.",
+          "predicted": "-",
+          "expected": "lactobacillus brevis -[produces/converts]-> gaba",
+          "error": "missed"
+        },
+        {
+          "id": "s061",
+          "text": "Neither Candida glabrata nor Candida tropicalis produced ethanol at detectable levels.",
+          "predicted": "candida glabrata -[produces]-> ethanol",
+          "expected": "-",
+          "error": "negated pair asserted"
+        },
+        {
+          "id": "s061",
+          "text": "Neither Candida glabrata nor Candida tropicalis produced ethanol at detectable levels.",
+          "predicted": "candida tropicalis -[produces]-> ethanol",
+          "expected": "-",
+          "error": "negated pair asserted"
+        },
+        {
+          "id": "s063",
+          "text": "Anaerostipes caccae utilizes lactate to form butyrate.",
+          "predicted": "anaerostipes caccae -[consumes]-> butyrate",
+          "expected": "['produces', 'converts']",
+          "error": "wrong type"
+        },
+        {
+          "id": "s066",
+          "text": "Ruminococcus albus does not ferment pectin but readily degrades cellulose.",
+          "predicted": "ruminococcus albus -[consumes]-> pectin",
+          "expected": "-",
+          "error": "negated pair asserted"
+        },
+        {
+          "id": "s067",
+          "text": "Mice colonized with Bacteroides dorei showed decreased plasma LPS.",
+          "predicted": "mice colonized -[inhibits]-> lps",
+          "expected": "-",
+          "error": "spurious pair"
+        },
+        {
+          "id": "s068",
+          "text": "Candida albicans produced acetaldehyde from ethanol.",
+          "predicted": "candida albicans -[produces]-> ethanol",
+          "expected": "['consumes', 'converts']",
+          "error": "wrong type"
+        },
+        {
+          "id": "s069",
+          "text": "Within the cohort, choline intake was not correlated with Escherichia coli abundance.",
+          "predicted": "within the -[associates_with]-> choline",
+          "expected": "-",
+          "error": "spurious pair"
+        },
+        {
+          "id": "s069",
+          "text": "Within the cohort, choline intake was not correlated with Escherichia coli abundance.",
+          "predicted": "escherichia coli -[associates_with]-> choline",
+          "expected": "-",
+          "error": "negated pair asserted"
+        },
+        {
+          "id": "s070",
+          "text": "Bifidobacterium infantis consumes human milk oligosaccharides and secretes acetate.",
+          "predicted": "-",
+          "expected": "bifidobacterium infantis -[consumes]-> human milk oligosaccharides",
+          "error": "missed"
+        }
+      ]
+    },
+    "rules_v2": {
+      "method": "rules_v2",
+      "n_sentences": 70,
+      "microbes": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 71,
+        "fp": 0,
+        "fn": 0
+      },
+      "metabolites": {
+        "precision": 1.0,
+        "recall": 0.98,
+        "f1": 0.99,
+        "tp": 96,
+        "fp": 0,
+        "fn": 2
+      },
+      "pairs": {
+        "precision": 1.0,
+        "recall": 0.951,
+        "f1": 0.975,
+        "tp": 78,
+        "fp": 0,
+        "fn": 4
+      },
+      "triples": {
+        "precision": 1.0,
+        "recall": 0.951,
+        "f1": 0.975,
+        "tp": 78,
+        "fp": 0,
+        "fn": 4
+      },
+      "negation_errors": 0,
+      "negated_total": 13,
+      "calibration": [
+        {
+          "bucket": "0.50-0.70",
+          "n": 2,
+          "precision": 1.0
+        },
+        {
+          "bucket": "0.70-0.85",
+          "n": 76,
+          "precision": 1.0
+        }
+      ],
+      "by_tag": {
+        "association": {
+          "fp": 0,
+          "gold": 6,
+          "hit": 6
+        },
+        "contrast": {
+          "gold": 1,
+          "hit": 0
+        },
+        "coordination": {
+          "fp": 0,
+          "gold": 21,
+          "hit": 21
+        },
+        "distractor": {
+          "fp": 0,
+          "gold": 1,
+          "hit": 1
+        },
+        "ellipsis": {
+          "gold": 1,
+          "hit": 0
+        },
+        "false-entity": {
+          "fp": 0,
+          "gold": 3,
+          "hit": 3
+        },
+        "hedge": {
+          "fp": 0,
+          "gold": 1,
+          "hit": 1
+        },
+        "metabolite-acts": {
+          "fp": 0,
+          "gold": 5,
+          "hit": 5
+        },
+        "multi-clause": {
+          "fp": 0,
+          "gold": 3,
+          "hit": 3
+        },
+        "negation": {
+          "gold": 3,
+          "hit": 1,
+          "fp": 0
+        },
+        "nominal": {
+          "fp": 0,
+          "gold": 4,
+          "hit": 4
+        },
+        "oov-metabolite": {
+          "fp": 0,
+          "gold": 4,
+          "hit": 2
+        },
+        "oov-microbe": {
+          "fp": 0,
+          "gold": 6,
+          "hit": 5
+        },
+        "passive": {
+          "fp": 0,
+          "gold": 12,
+          "hit": 12
+        },
+        "simple": {
+          "fp": 0,
+          "gold": 11,
+          "hit": 11
+        },
+        "source-of": {
+          "fp": 0,
+          "gold": 1,
+          "hit": 1
+        },
+        "substrate": {
+          "fp": 0,
+          "gold": 26,
+          "hit": 26
+        },
+        "two-verbs": {
+          "fp": 0,
+          "gold": 6,
+          "hit": 5
+        }
+      },
+      "errors": [
+        {
+          "id": "s028",
+          "text": "Unlike Eubacterium rectale, Bacteroides vulgatus does not produce butyrate.",
+          "predicted": "-",
+          "expected": "eubacterium rectale -[produces]-> butyrate",
+          "error": "missed"
+        },
+        {
+          "id": "s034",
+          "text": "Bilophila wadsworthia generates hydrogen sulfide from taurine.",
+          "predicted": "-",
+          "expected": "bilophila wadsworthia -[consumes/converts]-> taurine",
+          "error": "missed"
+        },
+        {
+          "id": "s046",
+          "text": "Bacteroides ovatus did not degrade inulin, but Bacteroides uniformis did.",
+          "predicted": "-",
+          "expected": "bacteroides uniformis -[consumes]-> inulin",
+          "error": "missed"
+        },
+        {
+          "id": "s070",
+          "text": "Bifidobacterium infantis consumes human milk oligosaccharides and secretes acetate.",
+          "predicted": "-",
+          "expected": "bifidobacterium infantis -[consumes]-> human milk oligosaccharides",
+          "error": "missed"
+        }
+      ]
+    }
+  },
+  "held_out": {
+    "rules_v1": {
+      "method": "rules_v1",
+      "n_sentences": 30,
+      "microbes": {
+        "precision": 0.811,
+        "recall": 1.0,
+        "f1": 0.896,
+        "tp": 30,
+        "fp": 7,
+        "fn": 0
+      },
+      "metabolites": {
+        "precision": 1.0,
+        "recall": 0.951,
+        "f1": 0.975,
+        "tp": 39,
+        "fp": 0,
+        "fn": 2
+      },
+      "pairs": {
+        "precision": 0.674,
+        "recall": 0.935,
+        "f1": 0.784,
+        "tp": 29,
+        "fp": 14,
+        "fn": 2
+      },
+      "triples": {
+        "precision": 0.512,
+        "recall": 0.71,
+        "f1": 0.595,
+        "tp": 22,
+        "fp": 21,
+        "fn": 9
+      },
+      "negation_errors": 6,
+      "negated_total": 6,
+      "calibration": [
+        {
+          "bucket": "0.00-0.50",
+          "n": 7,
+          "precision": 0.0
+        },
+        {
+          "bucket": "0.50-0.70",
+          "n": 8,
+          "precision": 0.75
+        },
+        {
+          "bucket": "0.70-0.85",
+          "n": 26,
+          "precision": 0.846
+        },
+        {
+          "bucket": "0.85-1.00",
+          "n": 2,
+          "precision": 0.5
+        }
+      ],
+      "by_tag": {
+        "association": {
+          "gold": 2,
+          "hit": 1,
+          "fp": 0
+        },
+        "coordination": {
+          "fp": 2,
+          "gold": 12,
+          "hit": 9
+        },
+        "distractor": {
+          "fp": 0,
+          "gold": 1,
+          "hit": 1
+        },
+        "false-entity": {
+          "fp": 1
+        },
+        "generic-microbe": {
+          "fp": 1
+        },
+        "genus-only": {
+          "fp": 1
+        },
+        "metabolite-acts": {
+          "fp": 0,
+          "gold": 1,
+          "hit": 1
+        },
+        "multi-clause": {
+          "fp": 2,
+          "gold": 2,
+          "hit": 1
+        },
+        "negation": {
+          "fp": 7
+        },
+        "nominal": {
+          "fp": 1,
+          "gold": 3,
+          "hit": 3
+        },
+        "oov-metabolite": {
+          "fp": 1,
+          "gold": 2,
+          "hit": 1
+        },
+        "oov-microbe": {
+          "fp": 2,
+          "gold": 4,
+          "hit": 2
+        },
+        "passive": {
+          "fp": 2,
+          "gold": 2,
+          "hit": 1
+        },
+        "simple": {
+          "fp": 1,
+          "gold": 4,
+          "hit": 4
+        },
+        "substrate": {
+          "fp": 0,
+          "gold": 16,
+          "hit": 10
+        }
+      },
+      "errors": [
+        {
+          "id": "h002",
+          "text": "Acetate is produced by Bifidobacterium bifidum during growth on lactose.",
+          "predicted": "bifidobacterium bifidum -[produces]-> lactose",
+          "expected": "['consumes']",
+          "error": "wrong type"
+        },
+        {
+          "id": "h003",
+          "text": "Bacteroides fragilis did not produce propionate in this assay.",
+          "predicted": "bacteroides fragilis -[produces]-> propionate",
+          "expected": "-",
+          "error": "negated pair asserted"
+        },
+        {
+          "id": "h006",
+          "text": "The synthesis of indole was enhanced in germ-free mice.",
+          "predicted": "the synthesis -[produces]-> indole",
+          "expected": "-",
+          "error": "spurious pair"
+        },
+        {
+          "id": "h008",
+          "text": "Lactobacillus casei and Lactobacillus gasseri both ferment glucose to lactate.",
+          "predicted": "lactobacillus casei -[consumes]-> lactate",
+          "expected": "['produces', 'converts']",
+          "error": "wrong type"
+        },
+        {
+          "id": "h008",
+          "text": "Lactobacillus casei and Lactobacillus gasseri both ferment glucose to lactate.",
+          "predicted": "lactobacillus gasseri -[consumes]-> lactate",
+          "expected": "['produces', 'converts']",
+          "error": "wrong type"
+        },
+        {
+          "id": "h009",
+          "text": "Fusobacterium nucleatum produces hydrogen sulfide, whereas Veillonella parvula consumes lactate.",
+          "predicted": "fusobacterium nucleatum -[produces]-> lactate",
+          "expected": "-",
+          "error": "spurious pair"
+        },
+        {
+          "id": "h009",
+          "text": "Fusobacterium nucleatum produces hydrogen sulfide, whereas Veillonella parvula consumes lactate.",
+          "predicted": "veillonella parvula -[consumes]-> hydrogen sulfide",
+          "expected": "-",
+          "error": "spurious pair"
+        },
+        {
+          "id": "h009",
+          "text": "Fusobacterium nucleatum produces hydrogen sulfide, whereas Veillonella parvula consumes lactate.",
+          "predicted": "veillonella parvula -[produces]-> lactate",
+          "expected": "['consumes']",
+          "error": "wrong type"
+        },
+        {
+          "id": "h010",
+          "text": "Gut microbes metabolize tryptophan.",
+          "predicted": "gut microbes -[consumes]-> tryptophan",
+          "expected": "-",
+          "error": "spurious pair"
+        },
+        {
+          "id": "h011",
+          "text": "Blautia obeum reduced TMA formation from choline.",
+          "predicted": "blautia obeum -[inhibits]-> choline",
+          "expected": "-",
+          "error": "spurious pair"
+        },
+        {
+          "id": "h012",
+          "text": "Neither Escherichia coli nor Salmonella enterica produced butyrate.",
+          "predicted": "escherichia coli -[produces]-> butyrate",
+          "expected": "-",
+          "error": "negated pair asserted"
+        },
+        {
+          "id": "h012",
+          "text": "Neither Escherichia coli nor Salmonella enterica produced butyrate.",
+          "predicted": "salmonella enterica -[produces]-> butyrate",
+          "expected": "-",
+          "error": "negated pair asserted"
+        },
+        {
+          "id": "h014",
+          "text": "Desulfovibrio piger generates hydrogen sulfide from sulfate.",
+          "predicted": "desulfovibrio piger -[produces]-> sulfate",
+          "expected": "['consumes', 'converts']",
+          "error": "wrong type"
+        },
+        {
+          "id": "h015",
+          "text": "Colonic butyrate was depleted in patients with Ruminococcus gnavus overgrowth.",
+          "predicted": "-",
+          "expected": "ruminococcus gnavus -[associates_with/inhibits]-> butyrate",
+          "error": "missed"
+        },
+        {
+          "id": "h016",
+          "text": "Bacteroides thetaiotaomicron does not utilize cellulose but degrades xylan.",
+          "predicted": "bacteroides thetaiotaomicron -[consumes]-> cellulose",
+          "expected": "-",
+          "error": "negated pair asserted"
+        },
+        {
+          "id": "h018",
+          "text": "Candida albicans ferments glucose to ethanol.",
+          "predicted": "candida albicans -[consumes]-> ethanol",
+          "expected": "['produces', 'converts']",
+          "error": "wrong type"
+        },
+        {
+          "id": "h021",
+          "text": "Helicobacter pylori urease hydrolyzes urea to ammonia.",
+          "predicted": "-",
+          "expected": "helicobacter pylori -[produces/converts]-> ammonia",
+          "error": "missed"
+        },
+        {
+          "id": "h022",
+          "text": "Bifidobacterium longum was unable to produce hydrogen sulfide.",
+          "predicted": "bifidobacterium longum -[produces]-> hydrogen sulfide",
+          "expected": "-",
+          "error": "negated pair asserted"
+        },
+        {
+          "id": "h024",
+          "text": "Propionate production by Bacteroides vulgatus was confirmed by isotope labeling.",
+          "predicted": "propionate production -[produces]-> propionate",
+          "expected": "-",
+          "error": "spurious pair"
+        },
+        {
+          "id": "h026",
+          "text": "Choline was not metabolized by Bifidobacterium breve.",
+          "predicted": "choline was -[consumes]-> choline",
+          "expected": "-",
+          "error": "spurious pair"
+        },
+        {
+          "id": "h026",
+          "text": "Choline was not metabolized by Bifidobacterium breve.",
+          "predicted": "bifidobacterium breve -[consumes]-> choline",
+          "expected": "-",
+          "error": "negated pair asserted"
+        },
+        {
+          "id": "h028",
+          "text": "Higher Bilophila abundance was linked to elevated hydrogen sulfide.",
+          "predicted": "bilophila abundance -[associates_with]-> hydrogen sulfide",
+          "expected": "-",
+          "error": "spurious pair"
+        },
+        {
+          "id": "h030",
+          "text": "Saccharomyces cerevisiae produces ethanol and carbon dioxide from sucrose.",
+          "predicted": "saccharomyces cerevisiae -[produces]-> sucrose",
+          "expected": "['consumes', 'converts']",
+          "error": "wrong type"
+        }
+      ]
+    },
+    "rules_v2": {
+      "method": "rules_v2",
+      "n_sentences": 30,
+      "microbes": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 30,
+        "fp": 0,
+        "fn": 0
+      },
+      "metabolites": {
+        "precision": 1.0,
+        "recall": 0.951,
+        "f1": 0.975,
+        "tp": 39,
+        "fp": 0,
+        "fn": 2
+      },
+      "pairs": {
+        "precision": 1.0,
+        "recall": 0.839,
+        "f1": 0.912,
+        "tp": 26,
+        "fp": 0,
+        "fn": 5
+      },
+      "triples": {
+        "precision": 1.0,
+        "recall": 0.839,
+        "f1": 0.912,
+        "tp": 26,
+        "fp": 0,
+        "fn": 5
+      },
+      "negation_errors": 0,
+      "negated_total": 6,
+      "calibration": [
+        {
+          "bucket": "0.50-0.70",
+          "n": 2,
+          "precision": 1.0
+        },
+        {
+          "bucket": "0.70-0.85",
+          "n": 24,
+          "precision": 1.0
+        }
+      ],
+      "by_tag": {
+        "association": {
+          "gold": 2,
+          "hit": 1,
+          "fp": 0
+        },
+        "coordination": {
+          "fp": 0,
+          "gold": 12,
+          "hit": 10
+        },
+        "distractor": {
+          "fp": 0,
+          "gold": 1,
+          "hit": 1
+        },
+        "metabolite-acts": {
+          "fp": 0,
+          "gold": 1,
+          "hit": 1
+        },
+        "multi-clause": {
+          "fp": 0,
+          "gold": 2,
+          "hit": 2
+        },
+        "nominal": {
+          "gold": 3,
+          "hit": 1,
+          "fp": 0
+        },
+        "oov-metabolite": {
+          "fp": 0,
+          "gold": 2,
+          "hit": 1
+        },
+        "oov-microbe": {
+          "fp": 0,
+          "gold": 4,
+          "hit": 4
+        },
+        "passive": {
+          "fp": 0,
+          "gold": 2,
+          "hit": 1
+        },
+        "simple": {
+          "fp": 0,
+          "gold": 4,
+          "hit": 4
+        },
+        "substrate": {
+          "fp": 0,
+          "gold": 16,
+          "hit": 15
+        }
+      },
+      "errors": [
+        {
+          "id": "h002",
+          "text": "Acetate is produced by Bifidobacterium bifidum during growth on lactose.",
+          "predicted": "-",
+          "expected": "bifidobacterium bifidum -[consumes]-> lactose",
+          "error": "missed"
+        },
+        {
+          "id": "h015",
+          "text": "Colonic butyrate was depleted in patients with Ruminococcus gnavus overgrowth.",
+          "predicted": "-",
+          "expected": "ruminococcus gnavus -[associates_with/inhibits]-> butyrate",
+          "error": "missed"
+        },
+        {
+          "id": "h021",
+          "text": "Helicobacter pylori urease hydrolyzes urea to ammonia.",
+          "predicted": "-",
+          "expected": "helicobacter pylori -[produces/converts]-> ammonia",
+          "error": "missed"
+        },
+        {
+          "id": "h023",
+          "text": "Clostridium butyricum and Faecalibacterium prausnitzii are major butyrate producers.",
+          "predicted": "-",
+          "expected": "clostridium butyricum -[produces]-> butyrate",
+          "error": "missed"
+        },
+        {
+          "id": "h023",
+          "text": "Clostridium butyricum and Faecalibacterium prausnitzii are major butyrate producers.",
+          "predicted": "-",
+          "expected": "faecalibacterium prausnitzii -[produces]-> butyrate",
+          "error": "missed"
+        }
+      ]
+    }
+  }
+}

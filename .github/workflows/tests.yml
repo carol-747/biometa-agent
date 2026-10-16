@@ -1,0 +1,22 @@
+name: tests
+on: [push, pull_request]
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install backend (no heavy ML deps)
+        run: |
+          pip install fastapi==0.111.0 "starlette>=0.37.2,<0.38" "sqlalchemy>=2.0,<2.1" \
+                      pydantic-settings python-dotenv httpx biopython anthropic tenacity \
+                      numpy pytest pytest-asyncio
+      - name: Backend tests
+        working-directory: backend
+        run: pytest -q
+      - name: Extraction eval (v1 vs v2, dev + held-out)
+        run: python evals/run_extraction_eval.py
+      - name: Agent groundedness eval (offline)
+        run: python evals/run_agent_eval.py

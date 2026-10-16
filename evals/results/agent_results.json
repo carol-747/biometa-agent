@@ -1,0 +1,203 @@
+[
+  {
+    "mode": "offline",
+    "grounded": false,
+    "n_questions": 8,
+    "groundedness_rate": 1.0,
+    "invented_citations": 0,
+    "citation": {
+      "precision": 0.455,
+      "recall": 1.0
+    },
+    "abstention": {
+      "correct": 2,
+      "total": 3,
+      "hallucinated_citations": 1
+    },
+    "rows": [
+      {
+        "question": "What does Faecalibacterium prausnitzii produce?",
+        "supported": [
+          "30001001"
+        ],
+        "cited": [
+          "30001001"
+        ],
+        "invented_citations": [],
+        "grounded": true
+      },
+      {
+        "question": "Which bacteria produce trimethylamine from choline?",
+        "supported": [
+          "30001002"
+        ],
+        "cited": [
+          "30001001",
+          "30001002",
+          "30001004"
+        ],
+        "invented_citations": [],
+        "grounded": true
+      },
+      {
+        "question": "What inhibits Clostridioides difficile germination?",
+        "supported": [
+          "30001003"
+        ],
+        "cited": [
+          "30001003"
+        ],
+        "invented_citations": [],
+        "grounded": true
+      },
+      {
+        "question": "What short-chain fatty acids does Akkermansia muciniphila produce?",
+        "supported": [
+          "30001004"
+        ],
+        "cited": [
+          "30001003",
+          "30001004"
+        ],
+        "invented_citations": [],
+        "grounded": true
+      },
+      {
+        "question": "Does Lactobacillus reuteri affect TMAO?",
+        "supported": [
+          "30001005"
+        ],
+        "cited": [
+          "30001005"
+        ],
+        "invented_citations": [],
+        "grounded": true
+      },
+      {
+        "question": "What metabolites does Salmonella enterica produce?",
+        "supported": [],
+        "cited": [],
+        "invented_citations": [],
+        "grounded": true,
+        "abstained": true
+      },
+      {
+        "question": "Does Bifidobacterium longum degrade cellulose?",
+        "supported": [],
+        "cited": [],
+        "invented_citations": [],
+        "grounded": true,
+        "abstained": true
+      },
+      {
+        "question": "What is the role of penicillin in gut inflammation?",
+        "supported": [],
+        "cited": [
+          "30001001",
+          "30001003",
+          "30001004"
+        ],
+        "invented_citations": [],
+        "grounded": true,
+        "abstained": false
+      }
+    ]
+  },
+  {
+    "mode": "offline",
+    "grounded": true,
+    "n_questions": 8,
+    "groundedness_rate": 1.0,
+    "invented_citations": 0,
+    "citation": {
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "abstention": {
+      "correct": 3,
+      "total": 3,
+      "hallucinated_citations": 0
+    },
+    "rows": [
+      {
+        "question": "What does Faecalibacterium prausnitzii produce?",
+        "supported": [
+          "30001001"
+        ],
+        "cited": [
+          "30001001"
+        ],
+        "invented_citations": [],
+        "grounded": true
+      },
+      {
+        "question": "Which bacteria produce trimethylamine from choline?",
+        "supported": [
+          "30001002"
+        ],
+        "cited": [
+          "30001002"
+        ],
+        "invented_citations": [],
+        "grounded": true
+      },
+      {
+        "question": "What inhibits Clostridioides difficile germination?",
+        "supported": [
+          "30001003"
+        ],
+        "cited": [
+          "30001003"
+        ],
+        "invented_citations": [],
+        "grounded": true
+      },
+      {
+        "question": "What short-chain fatty acids does Akkermansia muciniphila produce?",
+        "supported": [
+          "30001004"
+        ],
+        "cited": [
+          "30001004"
+        ],
+        "invented_citations": [],
+        "grounded": true
+      },
+      {
+        "question": "Does Lactobacillus reuteri affect TMAO?",
+        "supported": [
+          "30001005"
+        ],
+        "cited": [
+          "30001005"
+        ],
+        "invented_citations": [],
+        "grounded": true
+      },
+      {
+        "question": "What metabolites does Salmonella enterica produce?",
+        "supported": [],
+        "cited": [],
+        "invented_citations": [],
+        "grounded": true,
+        "abstained": true
+      },
+      {
+        "question": "Does Bifidobacterium longum degrade cellulose?",
+        "supported": [],
+        "cited": [],
+        "invented_citations": [],
+        "grounded": true,
+        "abstained": true
+      },
+      {
+        "question": "What is the role of penicillin in gut inflammation?",
+        "supported": [],
+        "cited": [],
+        "invented_citations": [],
+        "grounded": true,
+        "abstained": true
+      }
+    ]
+  }
+]

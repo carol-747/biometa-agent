@@ -4,6 +4,62 @@
 
 A full-stack AI-powered system for discovering, extracting, and visualizing relationships between microorganisms and metabolites from PubMed scientific literature. Powered by Claude AI for conversational search.
 
+What makes this more than a demo: a **measured** extraction pipeline and a
+**groundedness-tested** agent. The relationship extractor and the chat agent are
+both evaluated against hand-labeled benchmarks that run in CI, and the
+improvements below are the before/after those evals produced.
+
+---
+
+## Evaluation results
+
+Reproduce with `python evals/run_extraction_eval.py` and `python evals/run_agent_eval.py`
+(offline, no API key). Full method and labeling notes in [`evals/README.md`](evals/README.md).
+
+### Relationship extraction — v1 vs. v2
+
+70 hand-labeled sentences (dev) covering passive voice, scoped negation,
+multi-clause sentences, substrate-vs-product, and distractor co-mentions, plus a
+30-sentence held-out set the rules were never tuned against.
+
+| Set | Extractor | Pair F1 | Triple F1 | Microbe precision | Negated pairs wrongly asserted |
+|---|---|---|---|---|---|
+| dev | v1 (sentence-scoped) | 0.79 | 0.59 | 0.80 | 12 / 13 |
+| dev | **v2 (pair-scoped)** | **0.97** | **0.97** | **1.00** | **0 / 13** |
+| held-out | v1 | 0.78 | 0.59 | 0.81 | 6 / 6 |
+| held-out | **v2** | **0.91** | **0.91** | **1.00** | **0 / 6** |
+
+v1 labeled every microbe–metabolite pair in a sentence with whichever verb
+appeared anywhere in it, and only halved confidence on negation. v2 reads the
+words *between* each specific pair, handles passive voice and substrate/product
+("produces B from A"), assigns each verb to its nearest subject, and treats
+scoped negation as "no relationship". An optional Claude tool-use extractor
+(`--methods llm`) is included and is held to the same benchmark.
+
+### Agent groundedness
+
+8 questions against a fixture database; questions with no supporting article
+should be answered with an abstention and no citation.
+
+| Agent | Groundedness | Invented citations | Citation precision | Correct abstentions |
+|---|---|---|---|---|
+| baseline | 100% | 0 | 0.46 | 2 / 3 |
+| **grounded** | **100%** | **0** | **1.00** | **3 / 3** |
+
+Neither version invents a PMID, but the baseline over-cites off-topic papers
+returned by the keyword-search fallback; the grounded agent only surfaces
+articles that mention a queried entity and abstains otherwise.
+
+---
+
+## MCP server
+
+`mcp_server/server.py` exposes the literature database to any MCP client (Claude
+Desktop, Claude Code) as five tools: `find_relationships`, `search_articles`,
+`get_article`, `extract_from_text`, and `list_entities`. Every result carries
+its source PMID, so answers built on these tools stay grounded. Setup and the
+Claude Desktop config are in the file's docstring and `mcp_server/requirements.txt`.
+
 ---
 
 ## Features
@@ -125,6 +181,14 @@ biometa-agent/
 │       ├── metabolites.json        # ~120 metabolites
 │       └── metabolite_classes.json # Metabolite classification
 ├── models/                         # (NER model cache)
+├── evals/                          # offline eval suite (runs in CI)
+│   ├── data/                       # gold benchmarks + generators
+│   ├── run_extraction_eval.py      # v1 vs v2 vs llm on labeled sentences
+│   ├── run_agent_eval.py           # citation grounding + abstention
+│   ├── fixtures.py                 # in-memory DB with known relationships
+│   └── results/                    # committed eval reports
+├── mcp_server/                     # MCP tools over the literature DB
+│   └── server.py
 ├── docker-compose.yml
 ├── .env.example
 └── README.md
@@ -297,6 +361,17 @@ uvicorn app.main:app --reload
 cd backend
 pytest tests/ -v
 ```
+
+### Run the evals
+
+```bash
+python evals/run_extraction_eval.py     # extraction: v1 vs v2, dev + held-out
+python evals/run_agent_eval.py          # agent: citation grounding + abstention
+```
+
+Both run offline and write reports to `evals/results/`. Add `ANTHROPIC_API_KEY`
+and `--methods rules_v2 llm` (extraction) or `--live` (agent) to evaluate the
+Claude-based paths.
 
 ### Run frontend locally
 

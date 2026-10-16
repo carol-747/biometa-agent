@@ -162,7 +162,7 @@ def test_relationship_fields_present():
         assert rel.microbe
         assert rel.metabolite
         assert rel.relationship_type
-        assert rel.extraction_method == "pattern"
+        assert rel.extraction_method == "rules_v2"
 
 
 def test_relationship_deduplication():

@@ -1,0 +1,5 @@
+# MCP server (separate from the backend to avoid the FastAPI/Starlette version clash).
+# FastMCP v1 API; Claude Desktop configs use this interface.
+mcp>=1.2,<2
+sqlalchemy>=2.0,<2.1
+psycopg2-binary==2.9.9

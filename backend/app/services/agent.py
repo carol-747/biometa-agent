@@ -50,10 +50,14 @@ User query: {query}"""
 class ConversationalAgent:
     """Stateless agent; conversation history passed in each call."""
 
-    def __init__(self):
+    def __init__(self, grounded: bool = True):
         settings = get_settings()
         self.client = anthropic.Anthropic(api_key=settings.anthropic_api_key)
         self.model = "claude-sonnet-4-6"
+        # grounded=True: only surface articles that actually mention a queried
+        # entity, and abstain when nothing solid matches (avoids citing papers
+        # returned by the keyword fallback that are off-topic).
+        self.grounded = grounded
 
     def _analyze_query(self, query: str) -> dict[str, Any]:
         """Use Claude to extract entities and intent from user query."""
@@ -104,6 +108,16 @@ class ConversationalAgent:
         relationships = []
         microbe_names = [m.lower() for m in analysis.get("microbes", [])]
         metabolite_names = [m.lower() for m in analysis.get("metabolites", [])]
+
+        if self.grounded and (microbe_names or metabolite_names):
+            # Keep only articles that actually mention a queried entity. Without
+            # an embedding model, semantic_search degrades to keyword ILIKE and
+            # returns off-topic papers, which must not be cited as evidence.
+            terms = microbe_names + metabolite_names
+            articles = [
+                a for a in articles
+                if any(t in (a.get("title", "") + " " + (a.get("abstract") or "")).lower() for t in terms)
+            ]
 
         if microbe_names or metabolite_names:
             q = db.query(MicrobeMetaboliteRelationship).join(

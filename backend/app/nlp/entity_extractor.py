@@ -135,8 +135,37 @@ def _get_nlp():
 # Public API
 # ---------------------------------------------------------------------------
 
-def extract_entities(text: str) -> list[Entity]:
-    """Extract microbe and metabolite entities from text."""
+# Genera accepted for binomial names that are not in the dictionaries. The
+# legacy pattern accepted ANY "Capitalized lowercase" pair, so sentence starts
+# like "The production" or "Gut bacteria" became microbes.
+EXTRA_GENERA = {
+    "Acinetobacter", "Alistipes", "Bacillus", "Bilophila", "Butyricimonas", "Christensenella",
+    "Citrobacter", "Collinsella", "Corynebacterium", "Cutibacterium", "Desulfovibrio", "Dialister",
+    "Dorea", "Eggerthella", "Enterobacter", "Erysipelatoclostridium", "Hungatella", "Intestinimonas",
+    "Lacticaseibacillus", "Lactiplantibacillus", "Lactococcus", "Leuconostoc", "Ligilactobacillus",
+    "Limosilactobacillus", "Megasphaera", "Morganella", "Odoribacter", "Oscillibacter", "Paenibacillus",
+    "Parabacteroides", "Pediococcus", "Propionibacterium", "Proteus", "Shigella", "Sutterella",
+    "Veillonella", "Weissella", "Yersinia", "Collinsella", "Lactobacillus", "Clostridium",
+}
+NON_EPITHETS = {
+    "species", "spp", "strain", "strains", "abundance", "growth", "infection", "levels", "cells",
+    "colonization", "supplementation", "treatment", "isolates", "genes", "spores", "and", "the",
+    "was", "were", "has", "have", "with", "from", "that", "this",
+}
+
+
+def _known_genera() -> set[str]:
+    _dictionaries.load()
+    genera = {name.split()[0] for name in _dictionaries.microbes if " " in name}
+    return {g.capitalize() for g in genera} | EXTRA_GENERA
+
+
+def extract_entities(text: str, strict: bool = True) -> list[Entity]:
+    """Extract microbe and metabolite entities from text.
+
+    strict=True (default) accepts out-of-dictionary binomials only when the genus
+    is a known microbial genus. strict=False reproduces the legacy behavior.
+    """
     if not text:
         return []
 
@@ -181,11 +210,20 @@ def extract_entities(text: str) -> list[Entity]:
     species_pattern = re.compile(
         r"\b([A-Z][a-z]+(?:aceae|ales|ota|ia)?)\s+([a-z]{3,})\b"
     )
+    genera = _known_genera() if strict else None
+    taken = [(e.start, e.end) for e in entities]
     for m in species_pattern.finditer(text):
         span = (m.start(), m.end())
-        if span not in seen_spans:
-            seen_spans.add(span)
-            entities.append(Entity(m.group(), "MICROBE", "bacteria", m.start(), m.end(), "pattern"))
+        if span in seen_spans:
+            continue
+        if strict:
+            genus, epithet = m.group(1), m.group(2)
+            if genus not in genera or epithet in NON_EPITHETS:
+                continue
+            if any(s < span[1] and span[0] < e for s, e in taken):  # overlaps a dictionary hit
+                continue
+        seen_spans.add(span)
+        entities.append(Entity(m.group(), "MICROBE", "bacteria", m.start(), m.end(), "pattern"))
 
     return sorted(entities, key=lambda e: e.start)
 

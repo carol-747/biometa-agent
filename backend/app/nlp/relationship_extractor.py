@@ -63,6 +63,7 @@ class Relationship:
     evidence_sentence: str
     article_pmid: str | None = None
     extraction_method: str = "pattern"
+    negated: bool = False
 
 
 def _split_sentences(text: str) -> list[str]:
@@ -77,9 +78,25 @@ def _sentence_proximity(microbe_span: tuple, metabolite_span: tuple, text_len: i
 
 
 def extract_relationships(
+    text: str, pmid: str | None = None, max_sentences: int = 500, method: str = "rules_v2",
+) -> list[Relationship]:
+    """Extract microbe-metabolite relationships from text.
+
+    method: "rules_v2" (default, pair-scoped rules), "rules_v1" (legacy) or "llm".
+    """
+    if method == "rules_v1":
+        return extract_relationships_v1(text, pmid, max_sentences)
+    if method == "llm":
+        from app.nlp.llm_extractor import extract_relationships_llm
+        return extract_relationships_llm(text, pmid)
+    from app.nlp.relationship_rules_v2 import extract_relationships_v2
+    return [r for r in extract_relationships_v2(text, pmid, max_sentences) if not r.negated]
+
+
+def extract_relationships_v1(
     text: str, pmid: str | None = None, max_sentences: int = 500
 ) -> list[Relationship]:
-    """Extract microbe-metabolite relationships from text."""
+    """Legacy extractor: any trigger word anywhere in the sentence, all pairs."""
     if not text:
         return []
 
@@ -87,7 +104,7 @@ def extract_relationships(
     sentences = _split_sentences(text)[:max_sentences]
 
     for sentence in sentences:
-        entities = extract_entities(sentence)
+        entities = extract_entities(sentence, strict=False)
         microbes = [e for e in entities if e.label == "MICROBE"]
         metabolites = [e for e in entities if e.label == "METABOLITE"]
 
